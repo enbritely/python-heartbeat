@@ -1,1 +1,1 @@
-from heartbeat import run_heartbeat_service
+from .heartbeat import run_heartbeat_service
