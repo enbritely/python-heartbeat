@@ -27,10 +27,7 @@ class HeartbeatRequestHandler(BaseHTTPRequestHandler):
                 import git_sha
                 commit_hash = git_sha.git_sha
             except ImportError:
-                try:
-                    commit_hash = subprocess.check_output(["git", "rev-parse", "HEAD"])
-                except subprocess.CalledProcessError:
-                    commit_hash = 'NA'
+                commit_hash = subprocess.check_output(["git", "rev-parse", "HEAD"])
 
             obj = {'status': 'running', 'build': commit_hash.strip(), 'uptime': uptime}
             self.wfile.write(('\n' + json.dumps(obj) + "\n").encode('utf-8'))
