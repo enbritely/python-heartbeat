@@ -3,6 +3,7 @@ import json
 import threading
 import datetime
 import subprocess
+import os
 
 if sys.version > '3':
     from http.server import HTTPServer
@@ -27,7 +28,8 @@ class HeartbeatRequestHandler(BaseHTTPRequestHandler):
                 import git_sha
                 commit_hash = git_sha.git_sha
             except ImportError:
-                commit_hash = subprocess.check_output(["git", "rev-parse", "HEAD"])
+                commit_hash = subprocess.check_output(["git", "rev-parse", "HEAD"],
+                                                      cwd=os.path.dirname(os.path.realpath(__file__))).strip()
 
             obj = {'status': 'running', 'build': commit_hash.strip(), 'uptime': uptime}
             self.wfile.write(('\n' + json.dumps(obj) + "\n").encode('utf-8'))
